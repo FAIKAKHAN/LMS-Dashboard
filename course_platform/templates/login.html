@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}login{% endblock %}
+
+{% block content %}
+
+<section class="form-container">
+
+   <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <h3>login now</h3>
+
+      {% if messages %}
+      {% for message in messages %}
+      <p style="font-size: 1.5rem; color: var(--red); margin-bottom: 1rem;">{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+
+      <p>your email <span>*</span></p>
+      <input type="email" name="email" placeholder="enter your email" required maxlength="50" class="box">
+      <p>your password <span>*</span></p>
+      <input type="password" name="pass" placeholder="enter your password" required maxlength="20" class="box">
+      <input type="submit" value="login new" name="submit" class="btn">
+   </form>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}watch video{% endblock %}
+
+{% block content %}
+
+<section class="watch-video">
+
+   <div class="video-container">
+      <div class="video">
+         <video src="{{ lesson.video_file.url }}" controls poster="{{ lesson.thumbnail.url }}" id="video"></video>
+      </div>
+      <h3 class="title">{{ lesson.title }}</h3>
+      <div class="info">
+         <p class="date"><i class="fas fa-calendar"></i><span>{{ lesson.course.date_created|date:"d-m-Y" }}</span></p>
+         <p class="date"><i class="fas fa-heart"></i><span>44 likes</span></p>
+      </div>
+      <div class="tutor">
+         <img src="{{ course.tutor.profile_pic.url|default:'static/images/pic-2.jpg' }}" alt="">
+         <div>
+            <h3>{{ course.tutor.user.username }}</h3>
+            <span>{{ course.tutor.profession }}</span>
+         </div>
+      </div>
+      <form action="" method="post" class="flex">
+         <a href="{% url 'playlist' course.id %}" class="inline-btn">view playlist</a>
+         <button><i class="far fa-heart"></i><span>like</span></button>
+      </form>
+      <p class="description">
+         {{ lesson.description }}
+      </p>
+   </div>
+
+</section>
+
+<section class="comments">
+
+   <h1 class="heading">{{ comments.count }} comments</h1>
+
+   <form action="" method="post" class="add-comment">
+      {% csrf_token %}
+      <h3>add comments</h3>
+      <textarea name="comment_box" placeholder="enter your comment" required maxlength="1000" cols="30"
+         rows="10"></textarea>
+      <input type="submit" value="add comment" class="inline-btn" name="add_comment">
+   </form>
+
+   <h1 class="heading">user comments</h1>
+
+   <div class="box-container">
+
+      {% for comment in comments %}
+      <div class="box">
+         <div class="user">
+            <img src="{{ comment.user.profile.profile_pic.url|default:'static/images/pic-1.jpg' }}" alt="">
+            <div>
+               <h3>{{ comment.user.username }}</h3>
+               <span>{{ comment.created_at|date:"d-m-Y" }}</span>
+            </div>
+         </div>
+         <div class="comment-box">{{ comment.content }}</div>
+         {% if request.user == comment.user %}
+         <form action="" class="flex-btn">
+            <input type="submit" value="edit comment" name="edit_comment" class="inline-option-btn">
+            <input type="submit" value="delete comment" name="delete_comment" class="inline-delete-btn">
+         </form>
+         {% endif %}
+      </div>
+      {% empty %}
+      <p class="box">No comments yet. Be the first to comment!</p>
+      {% endfor %}
+
+   </div>
+
+</section>
+
+{% endblock %}
